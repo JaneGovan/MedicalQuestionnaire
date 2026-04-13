@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超声医疗问卷</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo/avg.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<style>
+    #curr-page {
+        width: 100vw;
+        height: 5%;
+    }
+    .questionaire {
+        width: 100vw;
+        height: 95%;
+    }
+    .s-image-show {
+        width: 200px;
+        height: 250px;
+        border-radius: 1rem;
+    }
+    .s-image-review {
+        width: 100vw;
+        height: 50%;
+        border-radius: 1rem;
+    }
+    .s-radios-review {
+        width: 100vw;
+        height: 45%;
+        border-radius: 1rem;
+    }
+    .page-number {
+        width: 25px;
+        height: 25px;
+        border-radius: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s;
+    }
+    .page-number:hover {
+        transform: scale(2);
+    }
+    .active {
+        text-shadow: 2rem;
+        color: blue;
+    }
+    .card {
+        width: 15rem;
+        height: 21rem;
+    }
+    .form-check {
+        width: 200px;
+        height: 25px;
+        border: 1rem;
+        border-radius: 0.5rem;
+        border-color: lightgray;
+        box-shadow: 3rem;
+    }
+    .slide-nav {
+        display: flex;               /* 横向排布 */
+        gap: .5rem;                  /* 按钮间距 */
+        white-space: nowrap;         /* 不换行 */
+        overflow-x: auto;            /* 超出可滚 */
+        scroll-behavior: smooth;     /* 手指/鼠标滚动画 */
+        padding-bottom: 4px;         /* 给滚动条留空 */
+    }
+    .title-info {
+        height: 18%;
+    }
+</style>
+<body>
+    <div class="vw-100 vh-100 d-flex flex-column">
+        <div class="questionaire d-flex flex-column shadow-md border-2 shadow-sm text-center justify-content-center align-items-center">
+            <div class="s-image-review border overflow-auto mb-1 d-flex flex-column border-2 shadow-sm align-items-center">
+                <div class="title-info w-100 d-flex justify-content-start" id="title-prompt">
+                    
+                </div>
+                <div id="li-image-show" class="flex-fill justify-content-center">
+
+                </div> 
+            </div>
+            <form id="radios-space" class="s-radios-review border d-flex flex-column slide-nav justify-content-start align-items-center">
+                <div class="border my-1 shadow-sm">
+                    <div id="checks-radios" class="container text-start justify-content-center align-items-center">
+
+                    </div>
+                </div>
+                <div class="border my-1 shadow-sm">
+                    <div class="d-flex text-center justify-content-center align-items-center">
+                        <span>该影像的诊断结果？</span>
+                    </div>
+                    <div class="d-flex text-center justify-content-center align-items-center">
+                        <div class="m-1 justify-content-center align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="result" id="result-1" value="恶性">
+                                <label class="form-check-label text-start" for="result-1">
+                                    恶性
+                                </label>
+                            </div>
+                        </div>
+                        <div class="m-1 justify-content-center align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="result" id="result-2" value="良性">
+                                <label class="form-check-label text-start" for="result-2">
+                                    良性
+                                </label>
+                            </div>
+                        </div>
+                        <div class="m-1 justify-content-center align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="result" id="result-3" value="正常">
+                                <label class="form-check-label text-start" for="result-3">
+                                    正常
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border my-1 shadow-sm">
+                    <div class="d-flex text-center justify-content-center align-items-center">
+                        <span>您对自己的诊断选择有多大信心？</span>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-center align-items-center">
+                        <div class="m-1 justify-content-center align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="confidence" id="confidence-1" value="极低信心">
+                                <label class="form-check-label text-center" for="confidence-1">
+                                    极低信心<br>(难以做出可靠判断)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="m-1 justify-content-center align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="confidence" id="confidence-2" value="低信心">
+                                <label class="form-check-label text-center" for="confidence-2">
+                                    低信心<br>(需要上级医生会诊)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="m-1 justify-content-center align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="confidence" id="confidence-3" value="中等信心">
+                                <label class="form-check-label text-center" for="confidence-3">
+                                    中等信心<br>(认为同行复核有益)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="m-1 justify-content-center align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="confidence" id="confidence-4" value="高信心">
+                                <label class="form-check-label text-center" for="confidence-4">
+                                    高信心<br>(认为诊断可靠)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="m-1 justify-content-center align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="confidence" id="confidence-5" value="极高信心">
+                                <label class="form-check-label text-center" for="confidence-5">
+                                    极高信心<br>(对诊断非常有把握)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-50 my-1 justify-content-center" id="tag-btn">
+                    <button class="btn btn-primary shadow-sm h-75" type="button" id="aiBtn">查看AI诊断</button>
+                </div>
+            </form>
+        </div>
+        <div id="curr-page" class="d-flex shadow-md border-2 shadow-sm text-center justify-content-center align-items-center">
+            <i class="bi bi-caret-left page-number mx-2" id="page-turn-left"></i>
+            <div id="page-list" class="d-flex el-pager justify-content-center mx-2">
+            </div>
+            <i class="bi bi-caret-right page-number mx-2" id="page-turn-right"></i>
+        </div>
+    </div>
+</body>
+<script>
+    const currentPage = {{page}};
+    console.log(currentPage);
+    const numPages = {{num_pages}};
+    console.log(numPages);
+
+    // #计时
+    const title_prompt = document.getElementById('title-prompt');
+    const TIMER_KEY = 'us_exam_timer'; // 存储键名
+
+    function formatTime(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (totalSeconds % 60).toString().padStart(2, '0');
+        return `${h}时:${m}分:${s}秒`;
+    }
+
+    // 计时器状态
+    let timer = {
+        accumulated: 0,      // 已累计的时间（毫秒）
+        startTime: Date.now(), // 本次开始时间点
+        isRunning: true
+    };
+
+    // 初始化：从localStorage恢复
+    const saved = localStorage.getItem(TIMER_KEY);
+    if (saved) {
+        const data = JSON.parse(saved);
+        timer.accumulated = data.accumulated || 0;
+        if (document.hidden) {
+            timer.isRunning = false; // 如果当前就是隐藏状态（后台刷新），保持暂停
+        } else {
+            timer.startTime = Date.now();
+        }
+    }
+
+    // 计算当前总时长
+    const getDuration = () => {
+        if (!timer.isRunning) return timer.accumulated;
+        return timer.accumulated + (Date.now() - timer.startTime);
+    };
+
+    // 保存状态
+    const saveTimer = () => {
+        localStorage.setItem(TIMER_KEY, JSON.stringify({
+            accumulated: timer.accumulated,
+            lastUpdate: Date.now()
+        }));
+    };
+
+    // 页面可见性变化（离开暂停，回来继续）
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            // 离开：结算当前这段时间，暂停
+            timer.accumulated += Date.now() - timer.startTime;
+            timer.isRunning = false;
+            saveTimer();
+        } else {
+            // 回来：重新开始计时
+            timer.startTime = Date.now();
+            timer.isRunning = true;
+        }
+    });
+
+    // 刷新/关闭前保存（防止丢失当前这一秒）
+    window.addEventListener('beforeunload', () => {
+        if (timer.isRunning) {
+            timer.accumulated += Date.now() - timer.startTime;
+            saveTimer();
+        }
+    });
+
+    // 更新显示
+    setInterval(() => {
+        const duration = getDuration();
+        title_prompt.innerHTML = `
+            <div class="d-flex flex-column">
+                <h2 class="m-2">超声图像阅片（⏱️已用时间 ${formatTime(duration)}）</h2>
+                <p class="m-2 text-center">当前进度：{{page}} / {{num_pages}}</p>
+            </div>
+        `;
+    }, 500);
+
+    // 可选：提交完成后清除计时（防止影响下次答题）
+    // localStorage.removeItem(TIMER_KEY);
+
+    // #页码导航
+    const page_list = document.getElementById('page-list')
+    const page_left = document.getElementById('page-turn-left')
+    const page_right = document.getElementById('page-turn-right')
+
+    page_left.addEventListener('click', async () => {
+        if (currentPage > 1) {
+            location.href = `/interact?page=${currentPage - 1}`;
+        };
+    });
+    page_right.addEventListener('click', async () => {
+        if (currentPage < numPages) {
+            location.href = `/interact?page=${currentPage + 1}`;
+        };
+    });
+    let list;
+    if (numPages <= 7) {
+        list = Array.from({ length: numPages }, (_, i) => i + 1);
+    } else if ((currentPage-1) >= 3 && (numPages-currentPage) >= 3) {
+        list = [1, '···', currentPage-1, currentPage, currentPage+1, '···', numPages];
+    } else if ((currentPage-1) < 3) {
+        list = [1, 2, 3, 4, 5, '···', numPages];
+    } else {
+        list = [1, '···', numPages-4, numPages-3, numPages-2, numPages-1, numPages];
+    };
+    list.forEach((text, idx)=> {
+        const child = document.createElement('div');
+        if (text !== '···' && text === currentPage) {
+            child.className = 'page-number active';
+        } else {
+            child.className = 'page-number';
+        }
+        child.textContent = text;
+        child.addEventListener('click', async () => {
+            if (text !== '···') {
+                // await fetch(`/interact?page=${text}`);
+                location.href = `/interact?page=${text}`;
+            } else {
+                if (idx === 1) {
+                    // await fetch(`/interact?page=${currentPage-3}`);
+                    location.href = `/interact?page=${currentPage - 3}`;
+                } else if (idx === 5) {
+                    // await fetch(`/interact?page=${currentPage+3}`);
+                    location.href = `/interact?page=${currentPage + 3}`;
+                };
+            };       
+        });
+        page_list.appendChild(child);
+    });
+
+    // #页面数据填充
+    async function loadPageData(params) {
+        console.log(params)
+        try {
+            const res = await fetch(`/checks`,{
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(params)
+                // credentials: 'include' 
+            });
+            if (!res.ok) throw new Error(res.status); // ② 检查 200-299
+            const data = await res.json();            // ③ 解析 JSON
+            return data
+        } catch (e) {
+            console.error('出错:', e);
+        }
+    }
+    (async () => {
+    try {
+        const page_data = await loadPageData({page_id: currentPage});
+        const image_area = document.getElementById('li-image-show');
+        const radios_grid = document.getElementById('checks-radios');
+        console.log(page_data);
+        const features = page_data.features;
+        const records = page_data.selected;
+        image_area.innerHTML = `
+        <div class="card">
+            <img src="/images/${page_data['src_image_name']}" class="card-img-top" alt="src-med-img">
+            <div class="card-body">
+                <p class="card-text">待诊图像</p>
+            </div>
+        </div>
+        `;
+        Object.entries(features).forEach(([key, value]) => {
+            console.log(key, value);
+            const record_value = records[key];
+            const row_info = document.createElement('div');
+            row_info.className = `row row-cols-auto`;
+            const col_info = document.createElement('div');
+            col_info.className = `d-flex mx-4 justify-content-end align-items-center`;
+            title_content = document.createElement('span');
+            title_content.className = `d-flex text-end`;
+            title_content.textContent = `${key}: `;
+            col_info.appendChild(title_content)
+            row_info.appendChild(col_info);
+            value.forEach(one => {
+                const col_info = document.createElement('div');
+                col_info.className = `d-flex col border shadow-sm m-2 justify-content-center align-items-center`;
+                if (record_value && record_value === one) {
+                    radio_elem = `
+                    <div class="form-check w-100">
+                        <input class="form-check-input" type="radio" name="${key}" id="${key}-${one}" value="${one}" checked>
+                        <label class="form-check-label text-start" for="${key}-${one}">
+                            ${one}
+                        </label>
+                    </div>
+                    `;
+                } else {
+                    radio_elem = `
+                    <div class="form-check w-100">
+                        <input class="form-check-input" type="radio" name="${key}" id="${key}-${one}" value="${one}">
+                        <label class="form-check-label text-start" for="${key}-${one}">
+                            ${one}
+                        </label>
+                    </div>
+                    `;
+                };
+                col_info.innerHTML = radio_elem;
+                row_info.appendChild(col_info);
+            });
+            radios_grid.appendChild(row_info);
+        });
+    } catch (e) {
+        console.error(e);
+    }
+    })();
+
+    // #更新记录并添加ai对比
+    async function updateRecord(params) {
+        console.log(params)
+        try {
+            const res = await fetch(`/records`,{
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(params)
+                // credentials: 'include' 
+            });
+            console.log(res)
+            if (!res.ok) throw new Error(res.status); // ② 检查 200-299
+        } catch (e) {
+            console.error('出错:', e);
+        }
+    };
+    document.getElementById('aiBtn').addEventListener('click', () => {
+        const from_data = new FormData(document.getElementById('radios-space'));
+        const data = Object.fromEntries(from_data.entries());
+        (async () => {
+            try {
+                localStorage.removeItem(TIMER_KEY);
+                await updateRecord({page_id: currentPage, selected: data});
+            } catch(e) {
+                console.error(e);
+            };
+        })();
+    });
+</script>
+</html>

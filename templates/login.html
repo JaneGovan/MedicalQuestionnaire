@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超声医疗问卷</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo/avg.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<style>
+    body {
+        background-image: url('/assets/logo/bg.jpeg'); 
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .login-card {
+        width: 750px;
+        height: 650px;
+        background-color: white;
+        border-radius: 3rem;
+        border-color: black;
+    }
+    .alert-overlay {
+    /* 核心属性：固定定位，脱离文档流 */
+    position: fixed; 
+    
+    /* 位置设置：距离顶部 20px，右侧 20px */
+    top: 20px;
+    left: 20px;
+    
+    /* 层级：确保在所有元素之上 */
+    z-index: -1;
+    
+    /* 样式美化 */
+    width: 450px;
+    padding: 15px;
+    background-color: #fff;
+    border-left: 5px solid #007bff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    font-family: sans-serif;
+    color: #333;
+}
+</style>
+<body>
+    <!-- 提示区域 HTML -->
+    <div class="alert-overlay">
+        <i class="bi bi-lightbulb-fill"></i>
+        这是一个提示框。
+    </div>
+    <div class="vw-100 vh-100 d-flex align-items-center justify-content-center">
+        <form id="loginForm" class="login-card d-flex flex-column border shadow justify-content-center align-items-center" method="post">
+            <div class="text-center md-5 w-75">
+                <img src="/assets/logo/logo.png" alt="LOGO">
+            </div>
+            <div class="text-center md-5">
+                <h2>欢迎登录!</h2>
+            </div>
+            <div class="form-floating mb-5 w-50 shadow-sm">
+                <input type="text" class="form-control" id="floatingInput" name="username" placeholder="username">
+                <label>昵称</label>
+            </div>
+            <div class="form-floating mb-5 w-50 shadow-sm">
+                <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="password">
+                <label>密码</label>
+            </div>
+            <div class="form-floating mb-5 w-50 shadow-sm">
+                <input type="text" class="form-control" id="floatingInput" name="company" placeholder="company">
+                <label>单位/机构</label>
+            </div>
+            <div class="row g-1 mb-4"> <!-- g-2 是间距，你可以根据需要调整 -->
+                <div class="col">
+                    <div class="form-floating mx-4">
+                        <select class="form-select text-sm" name="department" id="department">
+                            <option value="null"> - </option>
+                            <option value="心超">心超</option>
+                            <option value="其他类(少数医院)">其他类(少数医院)</option>
+                        </select>
+                        <label>超声医学科</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mx-4">
+                        <select class="form-select" name="prof_title" id="prof_title">
+                            <option value="null"> - </option>
+                            <option value="医学生">医学生</option>
+                            <option value="住院医师">住院医师</option>
+                            <option value="主治医师">主治医师</option>
+                            <option value="副主任医师">副主任医师</option>
+                            <option value="主任医师">主任医师</option>
+                        </select>
+                        <label>职称</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mx-4 flex-fill">
+                        <input type="number" class="form-control" name="experience" id="experience" placeholder="资历" value="0" min="0">
+                        <label for="experience">资历</label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex w-50 h-15 justify-content-center">
+                <button class="btn btn-primary shadow-sm mx-5 w-50" type="submit" id="regBtn">注册</button>
+                <button class="btn btn-primary shadow-sm mx-5 w-50" type="submit" id="logBtn">登录</button>
+            </div>       
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"></script>
+    <script>
+        const params = new URLSearchParams(location.search);
+        const form = document.getElementById('loginForm');
+        if (params.has('error')) {
+            alert(decodeURIComponent(params.get('error')));
+            history.replaceState(null, '', '/');   // 可选：清参防刷新再弹
+        };
+        const regBtn = document.getElementById('regBtn');
+        const logBtn = document.getElementById('logBtn');
+        regBtn.addEventListener('click', () => {
+            regBtn.disabled = true;
+            form.action = '/register';
+            form.submit();
+        });
+        logBtn.addEventListener('click', () => {
+            logBtn.disabled = true;
+            form.action = '/login';
+            form.submit();
+        });
+  </script>
+</body>
+</html>

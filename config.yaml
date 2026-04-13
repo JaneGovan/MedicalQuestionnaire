@@ -1,0 +1,3 @@
+project_name: &project_name "Qustionaire"
+port: &port 13579
+log_file: !join [logs, *port, *project_name]

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷完成</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --text-main: #1a1a1a;
+            --text-muted: #65676b;
+            --accent-color: #0084ff;
+        }
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-color);
+            cursor: pointer;
+            overflow: hidden;
+            user-select: none;
+        }
+        .container-fluid {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        .container-fluid:hover {
+            background-color: #e4e6e9;
+        }
+        .finish-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            width: 100%;
+            height: 95%;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        .finish-card:hover {
+            transform: translateY(-5px);
+        }
+        .icon-check {
+            width: 80px;
+            height: 80px;
+            background-color: #e7f3ff;
+            color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2.5rem;
+        }
+        h1 {
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+        p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .hint {
+            font-size: 0.85rem;
+            color: #bcc0c4;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body onclick="closeTab()">
+    <div class="container-fluid" onclick="closeTab()">
+        <div class="finish-card" onclick="closeTab()">
+            <div class="icon-check">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.037a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.42-6.446z"/>
+                </svg>
+            </div>
+            <h1>您已完成本次问卷</h1>
+            <p>非常感谢您的参与！</p>
+            <div class="hint">点击页面任何地方关闭</div>
+        </div>
+    </div>
+
+    <script>
+        function closeTab() {
+            // Attempt to close the window
+            window.close();
+            
+            // Fallback for browsers that block script-initiated close
+            console.log("尝试关闭标签页...");
+            
+            // If it's still open, it's likely due to browser security restrictions
+            // (scripts can usually only close windows they opened).
+        }
+    </script>
+</body>
+</html>
+
