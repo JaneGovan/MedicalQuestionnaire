@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify, send_from_directory
-from flask_cors.extension import CORS
 import json
 import os
 import uuid
@@ -13,7 +12,6 @@ load_dotenv()
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets')
 app.secret_key = 'medical-questionaire'
-# CORS(app)
 
 
 try:
