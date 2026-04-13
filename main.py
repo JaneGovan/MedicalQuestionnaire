@@ -7,8 +7,7 @@ from services.login_service import hash_with_salt, verify_password
 from utils.log import Logger, Config, USER_ID, REQUEST_ID
 from functools import wraps
 from services.record_service import get_page_info, init_record, get_current_page_id, get_num_pages, update_record, update_time
-from dotenv import load_dotenv
-load_dotenv()
+
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets')
 app.secret_key = 'medical-questionaire'
