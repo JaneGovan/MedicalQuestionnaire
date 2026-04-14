@@ -4,20 +4,21 @@ import copy
 import random
 from utils.log import Logger
 from utils.tools import retry
+from utils.mongo import find_record, upsert_record, load_all_records
 import threading
 
 file_lock = threading.Lock()
-RECORDS_FILE = './uploads/records.json'
 
-
+# print(load_all_records())
 def load_records():
-    with open(RECORDS_FILE, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    all_records = load_all_records()
+    Logger.info(f'表单信息：{all_records}')
+    return all_records
 
 
 def save_records(data):
-    with open(RECORDS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    for username, record_data in data.items():
+        upsert_record(username, record_data)
 
 with open('./db/ai_reasoning.json', 'r', encoding='utf-8') as f:
     cases = json.load(f)

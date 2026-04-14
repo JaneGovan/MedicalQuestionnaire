@@ -5,6 +5,7 @@ import uuid
 import traceback
 from services.login_service import hash_with_salt, verify_password
 from utils.log import Logger, Config, USER_ID, REQUEST_ID
+from utils.mongo import load_all_users, insert_user as db_insert_user
 from functools import wraps
 from services.record_service import get_page_info, init_record, get_current_page_id, get_num_pages, update_record, update_time
 
@@ -13,11 +14,12 @@ app = Flask(__name__, static_url_path='/assets', static_folder='assets')
 app.secret_key = 'medical-questionaire'
 
 
+
 try:
-    with open('./uploads/users.json', 'r', encoding='utf-8') as f:
-        USER_MAP = json.load(f)
+    USER_MAP = load_all_users()
 except:
     USER_MAP = {}
+Logger.info(f'用户表：{USER_MAP}')
 
 @app.before_request
 def setup_context():
@@ -50,12 +52,10 @@ def login_required(view):
 
 @app.errorhandler(Exception)
 def error_handler(e):
-    raise e
-    return jsonify({"code": "-1", "msg": "服务器异常", "data": traceback.format_exception_only(e)}), 500
+    Logger.error(f'{e}')
+    print(e)
+    return "504, 服务器异常！"
 
-@app.route('/favicon.ico')
-def favicon():
-    return '', 204  # 返回“无内容”状态码，简单粗暴防止 500
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -106,8 +106,7 @@ def register():
         USER_MAP[username] = new_user_info
         try:
             init_record(username)
-            with open('./uploads/users.json', 'w', encoding='utf-8') as f:
-                json.dump(USER_MAP, f, indent=2, ensure_ascii=False)
+            db_insert_user(username, new_user_info)
         except:
             Logger.info(f'信息未保存，新用户 {username} 注册失败! ')
             return redirect('/?error=系统繁忙，请重新注册！')
@@ -181,4 +180,4 @@ def time():
 
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', Config['port'], debug=True)
+    app.run('0.0.0.0', Config['port'], debug=True, use_reloader=False)

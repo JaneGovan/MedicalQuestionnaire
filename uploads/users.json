@@ -1,16 +1,16 @@
 {
   "Wenjin Gao": {
-    "password": "436d46725927303ea8d74c12fe146b1287e38249c1120f94f1fd9b047ef80589$2a9b61c152e49861761982a7252d9c31770bb9d8a8afb163281470ec46ffe3f0",
     "company": "HBUT",
     "department": "心超",
-    "profess_title": "医学生",
-    "experience": "0"
+    "experience": "0",
+    "password": "436d46725927303ea8d74c12fe146b1287e38249c1120f94f1fd9b047ef80589$2a9b61c152e49861761982a7252d9c31770bb9d8a8afb163281470ec46ffe3f0",
+    "profess_title": "医学生"
   },
   "jane008": {
-    "password": "675de5ecc30b413fda08d4db68fad418a0a626f7286595a5f797267af322d6b8$74f9da6543519d3bb79ecd89985039385f2b1163b9c1d0d4173465d49db1fe50",
     "company": "HBUT",
     "department": "其他类(少数医院)",
-    "profess_title": "主治医师",
-    "experience": "10"
+    "experience": "10",
+    "password": "675de5ecc30b413fda08d4db68fad418a0a626f7286595a5f797267af322d6b8$74f9da6543519d3bb79ecd89985039385f2b1163b9c1d0d4173465d49db1fe50",
+    "profess_title": "主治医师"
   }
 }
