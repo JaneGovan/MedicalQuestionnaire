@@ -417,6 +417,8 @@
     console.log(currentPage);
     const numPages = {{num_pages}};
     console.log(numPages);
+    const isFinished = {{finished | tojson}};
+    console.log(isFinished);
     const page_show = document.getElementById('curr-page-show');
     page_show.innerHTML=`<i class="bi bi-grid-3x3-gap me-1"></i> 当前进度：${currentPage} / ${numPages} 样本`
     const page_list = document.getElementById('page-list');
@@ -459,6 +461,10 @@
         return `${h}时:${m}分:${s}秒`;
     }
 
+    if (isFinished) {
+        shift_button.disabled = true;
+    };
+
     const TIMER_KEY = `us_exam_timer_${userName}`; // 存储键名
     const time_tag = document.getElementById("time-tag")
     let timer = {
@@ -496,6 +502,9 @@
 
     page_left.addEventListener('click', async () => {
         if (currentPage > 1) {
+            const from_data = new FormData(document.getElementById('main-console-section'));
+            const data = Object.fromEntries(from_data.entries());
+            await updateRecord({page_id: currentPage, selected: data});
             page_left.disabled = true;
             if(timer.isRunning){
                 timer.accumulated += Date.now() - timer.startTime;
@@ -507,6 +516,9 @@
     });
     page_right.addEventListener('click', async () => {
         if (currentPage < numPages) {
+            const from_data = new FormData(document.getElementById('main-console-section'));
+            const data = Object.fromEntries(from_data.entries());
+            await updateRecord({page_id: currentPage, selected: data});
             page_right.disabled = true;
             if(timer.isRunning){
                 timer.accumulated += Date.now() - timer.startTime;
@@ -535,6 +547,11 @@
         }
         child.textContent = text;
         child.addEventListener('click', async () => {
+            if (currentPage < numPages) {
+                const from_data = new FormData(document.getElementById('main-console-section'));
+                const data = Object.fromEntries(from_data.entries());
+                await updateRecord({page_id: currentPage, selected: data});
+            };
             if (text !== '···') {
                 if(timer.isRunning){
                     timer.accumulated += Date.now() - timer.startTime;
@@ -599,7 +616,8 @@
             conclusion_content = page_data["conclusion"];
             is_with_ai = records["with_ai"];
             has_saved_time = records.during_time;
-            if (non_finished_cases.length === 0) {
+            const ll_finished = non_finished_cases.length;
+            if (ll_finished === 0) {
                 timer.isRunning = false;
                 time_tag.textContent = `已用时间 ${formatTime(has_saved_time)}`;
             } else {
@@ -613,20 +631,10 @@
                 shift_button.innerHTML=`
                 提交
                 `;
-                const ll_finished = non_finished_cases.length;
-                if (ll_finished === 0){
-                    timer.isRunning = false;
-                    shift_button.disabled = true;
-                };
             } else{
                 shift_button.innerHTML=`
                 <i class="bi bi-cpu-fill me-2"></i> 下一页
                 `;
-                const ll_finished = non_finished_cases.length;
-                if (ll_finished === 0){
-                    timer.isRunning = false;
-                    shift_button.disabled = true;
-                };
             };
 
             image_area.innerHTML= `
@@ -881,7 +889,7 @@
                         timer.isRunning = false;
                         await updateTime({page_id: currentPage, during_time: getDuration()});
                         localStorage.removeItem(TIMER_KEY);
-                        clearInterval(timerInterval);
+                        clearInterval(timerInterval); 
                         location.href = `/finished`;
                     };
                 };

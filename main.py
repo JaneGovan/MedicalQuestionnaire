@@ -5,7 +5,7 @@ import uuid
 import traceback
 from services.login_service import hash_with_salt, verify_password
 from utils.log import Logger, Config, USER_ID, REQUEST_ID
-from utils.mongo import load_all_users, insert_user as db_insert_user
+from utils.mongo import load_all_users, load_all_records, insert_user as db_insert_user
 from functools import wraps
 from services.record_service import get_page_info, init_record, get_current_page_id, get_num_pages, update_record, update_time
 
@@ -52,31 +52,45 @@ def login_required(view):
 
 @app.errorhandler(Exception)
 def error_handler(e):
-    Logger.error(f'{e}')
-    print(e)
+    Logger.error(f'{traceback.format_exc()}')
+    print(traceback.format_exc())
     return "504, 服务器异常！"
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    if session.get('user_id') and session['user_id'] in USER_MAP:
+        return redirect(url_for('interact'))
     return render_template('login.html')
 
-@app.route('/finished', methods=['GET', 'POST'])
+@app.route('/finished', methods=['GET'])
+@login_required
 def finish():
-    return render_template('end.html')
+    user_id = session.get('user_id')
+    user_records = load_all_records()
+    user_record = user_records[user_id]
+    non_finished_cases = user_record['non_finished_cases']
+    if len(non_finished_cases) == 0:
+        del session['user_id']
+        return render_template('end.html')
+    else:
+        return redirect(url_for('interact'))
 
 @app.route('/interact', methods=['GET', 'POST'])
 @login_required
 def interact():
     user_id = session.get('user_id')
-    print(user_id)
     current_page_id = request.args.get('page')
-    num_pages = get_num_pages(user_id)
+    user_records = load_all_records()
+    user_record = user_records[user_id]
+    page_list = user_records[user_id].get('case_list')
+    num_pages = len(page_list)
+    is_finished = user_record['is_finished']
     if not current_page_id or int(current_page_id) < 1 or int(current_page_id) > num_pages:
         page_id = get_current_page_id(user_id)
     else:
         page_id = int(current_page_id)
-    return render_template(f'medwithai.html', user_id=user_id, page=page_id, num_pages=num_pages)
+    return render_template(f'medwithai.html', user_id=user_id, page=page_id, num_pages=num_pages, finished=is_finished)
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -90,6 +104,8 @@ def register():
         pwd = request.form.get('password')
         if not pwd:
             return redirect('/?error=密码不能为空！')
+        if  len(pwd) > 20:
+            return redirect('/?error=密码长度不能超过20！')
         company = request.form.get('company')
         department = request.form.get('department')
         profess_title = request.form.get('prof_title')
@@ -111,6 +127,7 @@ def register():
             Logger.info(f'信息未保存，新用户 {username} 注册失败! ')
             return redirect('/?error=系统繁忙，请重新注册！')
         session['user_id'] = username
+        print(username)
         Logger.info(f'新用户 {username} 注册成功! 机构：{company} 部门：{department} 职称：{profess_title} 经验：{experience}')
         return redirect(url_for('interact'))
 
@@ -132,6 +149,7 @@ def login():
             return redirect('/?error=密码错误，请正确输入密码！')
         else:
             session['user_id'] = username
+            print(username)
             Logger.info(f'用户 {username} 登录成功')
             return redirect(url_for('interact'))
 
@@ -160,11 +178,10 @@ def check():
 def record():
     user_id = session.get('user_id')
     data = request.get_json()
-    # print(data)
     page_id = data.get('page_id')
     selected_data = data.get('selected')
+    Logger.info(f'用户{user_id}页面{page_id}的提交数据: {selected_data}')
     update_record(user_id, page_id, selected_data)
-    Logger.info(f'更新用户{user_id}页面{page_id}的数据: {selected_data}')
     return jsonify(selected_data)
 
 @app.route('/time', methods=['POST'])

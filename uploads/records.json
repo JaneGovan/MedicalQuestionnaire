@@ -97,114 +97,110 @@
         "diagnosis_result": "4b",
         "assistant": "可接受"
       }
-    ]
+    ],
+    "is_finished": true
   },
   "jane008": {
     "case_list": [
+      "0001",
       "0004",
+      "0002",
       "0003",
-      "0001",
-      "0002",
+      "0003",
       "0004",
       "0001",
-      "0002",
-      "0003"
+      "0002"
     ],
-    "current_page": 7,
+    "current_page": 8,
+    "is_finished": false,
     "non_finished_cases": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
       6,
       7
     ],
     "selected": [
       {
-        "回声强度": "",
-        "形状规则": "",
-        "纵横比例": "",
-        "边界特征": "",
+        "回声强度": "等回声",
+        "形状规则": "圆形",
+        "纵横比例": "等比例",
+        "边界特征": "成角",
         "with_ai": true,
-        "confidence": "",
-        "during_time": 16951,
-        "diagnosis_result": "",
-        "assistant": ""
+        "confidence": "中等信心",
+        "during_time": 55409,
+        "diagnosis_result": "4a",
+        "assistant": "可接受"
       },
       {
-        "回声强度": "",
-        "形状规则": "",
-        "纵横比例": "",
-        "边界特征": "",
-        "with_ai": true,
-        "confidence": "",
-        "during_time": 58322,
-        "diagnosis_result": "",
-        "assistant": ""
+        "回声强度": "等回声",
+        "形状规则": "圆形",
+        "纵横比例": "等比例",
+        "边界特征": "成角",
+        "with_ai": false,
+        "confidence": "中等信心",
+        "during_time": 19656,
+        "diagnosis_result": "4a"
       },
       {
-        "回声强度": "",
-        "形状规则": "",
-        "纵横比例": "",
-        "边界特征": "",
-        "with_ai": true,
-        "confidence": "",
-        "during_time": 6550,
-        "diagnosis_result": "",
-        "assistant": ""
+        "回声强度": "等回声",
+        "形状规则": "圆形",
+        "纵横比例": "等比例",
+        "边界特征": "成角",
+        "with_ai": false,
+        "confidence": "中等信心",
+        "during_time": 19763,
+        "diagnosis_result": "4a"
       },
       {
-        "回声强度": "",
-        "形状规则": "",
-        "纵横比例": "",
+        "回声强度": "等回声",
+        "形状规则": "圆形",
+        "纵横比例": "等比例",
+        "边界特征": "成角",
+        "with_ai": false,
+        "confidence": "中等信心",
+        "during_time": 15685,
+        "diagnosis_result": "4a"
+      },
+      {
+        "回声强度": "等回声",
+        "形状规则": "圆形",
+        "纵横比例": "等比例",
+        "边界特征": "成角",
+        "with_ai": true,
+        "confidence": "中等信心",
+        "during_time": 15164,
+        "diagnosis_result": "4b",
+        "assistant": "可接受"
+      },
+      {
+        "回声强度": "等回声",
+        "形状规则": "圆形",
+        "纵横比例": "等比例",
+        "边界特征": "成角",
+        "with_ai": true,
+        "confidence": "中等信心",
+        "during_time": 16306,
+        "diagnosis_result": "4b",
+        "assistant": "可接受"
+      },
+      {
+        "回声强度": "高回声",
+        "形状规则": "不规则形",
+        "纵横比例": "大于1",
         "边界特征": "",
         "with_ai": false,
-        "confidence": "",
-        "during_time": 13448,
-        "diagnosis_result": ""
+        "confidence": "中等信心",
+        "during_time": 50772,
+        "diagnosis_result": "4b"
       },
       {
-        "回声强度": "",
-        "形状规则": "",
-        "纵横比例": "",
-        "边界特征": "",
-        "with_ai": false,
-        "confidence": "",
-        "during_time": 6070,
-        "diagnosis_result": ""
-      },
-      {
-        "回声强度": "",
-        "形状规则": "",
-        "纵横比例": "",
-        "边界特征": "",
-        "with_ai": false,
-        "confidence": "",
-        "during_time": 45600,
-        "diagnosis_result": ""
-      },
-      {
-        "回声强度": "",
-        "形状规则": "",
-        "纵横比例": "",
-        "边界特征": "",
+        "回声强度": "高回声",
+        "形状规则": "圆形",
+        "纵横比例": "等比例",
+        "边界特征": "成角",
         "with_ai": true,
-        "confidence": "",
-        "during_time": 25599,
-        "diagnosis_result": "",
+        "confidence": "中等信心",
+        "during_time": 27102,
+        "diagnosis_result": "4b",
         "assistant": ""
-      },
-      {
-        "回声强度": "",
-        "形状规则": "",
-        "纵横比例": "",
-        "边界特征": "",
-        "with_ai": false,
-        "confidence": "",
-        "during_time": 3456,
-        "diagnosis_result": ""
       }
     ]
   }

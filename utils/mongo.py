@@ -1,4 +1,5 @@
 import os
+from utils.log import Logger
 from pymongo import MongoClient
 from dotenv import load_dotenv
 load_dotenv()
@@ -57,7 +58,6 @@ def find_record(username):
         return doc
     return None
 
-
 def upsert_record(username, record_data):
     get_db().records.update_one(
         {'_id': username},
@@ -74,4 +74,20 @@ def load_all_records():
         result[username] = doc
     
     return result
+
+
+def delete_user_and_records(username):
+    db = get_db()
+    if not find_user(username) and not find_record(username):
+        print(f'[Warning]: 用户"{username}"信息不存在')
+        Logger.info(f'用户"{username}"信息不存在')
+    else:
+        if find_user(username):
+            db.users.delete_one({'_id': username})
+            print(f'[OK] users: 已删除mongodb中用户"{username}"的记录')
+            Logger.info(f'已删除users中用户"{username}"的信息')
+        if find_record(username):
+            db.records.delete_one({'_id': username})
+            print(f'[OK] records: 已删除mongodb中用户"{username}"的记录')
+            Logger.info(f'已删除records中用户"{username}"信息')
 

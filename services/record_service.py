@@ -12,7 +12,6 @@ file_lock = threading.Lock()
 # print(load_all_records())
 def load_records():
     all_records = load_all_records()
-    Logger.info(f'表单信息：{all_records}')
     return all_records
 
 
@@ -60,6 +59,7 @@ def init_record(user_id: str):
         user_record_info = {
             "case_list": case_list,
             "current_page": 1,
+            "is_finished": False,
             "non_finished_cases": list(range(len(case_list))),
             "selected": selected
         }
@@ -110,12 +110,23 @@ def update_record(user_id: str, page_idx: int, selected_data: dict):
     with file_lock:
         user_records = load_records()
         user_record = user_records[user_id]
+        page_list = user_records[user_id].get('case_list')
+        num_pages = len(page_list)
         selected = user_record.get('selected')[page_idx-1]
         user_record['current_page'] = page_idx
+        non_finished_cases = user_record['non_finished_cases']
+        start_len = len(non_finished_cases)
         is_finished_case = False
+        is_update = False
         for feat, val in selected_data.items():
-            if feat in selected:
+            if feat in selected and selected[feat] != val:
+                is_update = True
+                Logger.info(f'字段“{feat}”存在更新: {selected[feat]} -> {val}')
                 selected[feat] = val
+        if not is_update:
+            Logger.info(f'字段不存在更新')
+
+        Logger.info(f'用户{user_id}页面{page_idx}的数据: {selected}')
         for k, v in selected.items():
             if v == "":
                 is_finished_case = False
@@ -123,7 +134,9 @@ def update_record(user_id: str, page_idx: int, selected_data: dict):
         else:
             is_finished_case = True
         idx_page = page_idx-1
-        if is_finished_case and idx_page in set(user_record['non_finished_cases']):
+        if num_pages == page_idx and start_len == 0 and is_finished_case:
+            user_record['is_finished'] = True
+        if is_finished_case and idx_page in set(non_finished_cases):
             user_record['non_finished_cases'].remove(idx_page)
         save_records(user_records)
 
