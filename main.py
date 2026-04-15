@@ -50,14 +50,18 @@ def login_required(view):
         return view(**kwargs)                  # ③ 已登录 → 正常执行
     return wrapped
 
+@app.errorhandler(404)
+def page_not_found(e):
+    Logger.warning(f'404 页面不存在: {request.path}')
+    return "404, 页面不存在！", 404
+
 @app.errorhandler(Exception)
 def error_handler(e):
     Logger.error(f'{traceback.format_exc()}')
     print(traceback.format_exc())
-    return "504, 服务器异常！"
+    return "504, 服务器异常！", 500
 
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
     if session.get('user_id') and session['user_id'] in USER_MAP:
         return redirect(url_for('interact'))
@@ -76,7 +80,7 @@ def finish():
     else:
         return redirect(url_for('interact'))
 
-@app.route('/interact', methods=['GET', 'POST'])
+@app.route('/interact', methods=['GET'])
 @login_required
 def interact():
     user_id = session.get('user_id')
@@ -155,7 +159,7 @@ def login():
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 IMAGE_DIR = os.path.join(BASE_DIR, 'db', 'images')
-@app.route('/images/<path:filename>')
+@app.route('/images/<path:filename>', methods=['GET'])
 @login_required
 def serve_img(filename):
     return send_from_directory(IMAGE_DIR, filename)

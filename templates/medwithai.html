@@ -461,9 +461,6 @@
         return `${h}时:${m}分:${s}秒`;
     }
 
-    if (isFinished) {
-        shift_button.disabled = true;
-    };
 
     const TIMER_KEY = `us_exam_timer_${userName}`; // 存储键名
     const time_tag = document.getElementById("time-tag")
@@ -481,7 +478,11 @@
         };
     };
     
-    
+    if (isFinished) {
+        shift_button.disabled = true;
+        timer.isRunning = false;
+    };
+
     // console.log(`外${timer.accumulated}`);
 
     async function updateTime(params) {
@@ -796,14 +797,12 @@
     });
 
     // 刷新/关闭前保存（防止丢失当前这一秒）
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener('beforeunload', async () => {
         if (timer.isRunning) {
-            (async () => {
-                await updateTime({page_id: currentPage, during_time: getDuration()});
-                timer.accumulated = 0;
-                timer.startTime = Date.now();
-                saveTimer();
-            })();
+            await updateTime({page_id: currentPage, during_time: getDuration()});
+            timer.accumulated = 0;
+            timer.startTime = Date.now();
+            saveTimer();
         };
     });
 
