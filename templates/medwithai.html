@@ -503,9 +503,11 @@
 
     page_left.addEventListener('click', async () => {
         if (currentPage > 1) {
-            const from_data = new FormData(document.getElementById('main-console-section'));
-            const data = Object.fromEntries(from_data.entries());
-            await updateRecord({page_id: currentPage, selected: data});
+            if (!isFinished && currentPage != numPages) {
+                const from_data = new FormData(document.getElementById('main-console-section'));
+                const data = Object.fromEntries(from_data.entries());
+                await updateRecord({page_id: currentPage, selected: data});
+            };
             page_left.disabled = true;
             if(timer.isRunning){
                 timer.accumulated += Date.now() - timer.startTime;
@@ -517,9 +519,11 @@
     });
     page_right.addEventListener('click', async () => {
         if (currentPage < numPages) {
-            const from_data = new FormData(document.getElementById('main-console-section'));
-            const data = Object.fromEntries(from_data.entries());
-            await updateRecord({page_id: currentPage, selected: data});
+            if (!isFinished) {
+                const from_data = new FormData(document.getElementById('main-console-section'));
+                const data = Object.fromEntries(from_data.entries());
+                await updateRecord({page_id: currentPage, selected: data});
+            };
             page_right.disabled = true;
             if(timer.isRunning){
                 timer.accumulated += Date.now() - timer.startTime;
@@ -548,7 +552,7 @@
         }
         child.textContent = text;
         child.addEventListener('click', async () => {
-            if (currentPage < numPages) {
+            if (!isFinished && currentPage != numPages) {
                 const from_data = new FormData(document.getElementById('main-console-section'));
                 const data = Object.fromEntries(from_data.entries());
                 await updateRecord({page_id: currentPage, selected: data});
@@ -798,11 +802,14 @@
 
     // 刷新/关闭前保存（防止丢失当前这一秒）
     window.addEventListener('beforeunload', async () => {
-        if (timer.isRunning) {
+        if (timer.isRunning && !isFinished) {
             await updateTime({page_id: currentPage, during_time: getDuration()});
             timer.accumulated = 0;
             timer.startTime = Date.now();
             saveTimer();
+            page_data = await loadPageData({page_id: currentPage});
+            records = page_data.selected;
+            has_saved_time = records.during_time;
         };
     });
 
@@ -856,46 +863,45 @@
     };
 
 
-    shift_button.addEventListener('click', () => {
+    shift_button.addEventListener('click', async () => {
         shift_button.disabled = true;
         const from_data = new FormData(document.getElementById('main-console-section'));
         const data = Object.fromEntries(from_data.entries());
-        (async () => {
-            try {
-                await updateRecord({page_id: currentPage, selected: data});
-                if (currentPage < numPages){
+        try {
+            await updateRecord({page_id: currentPage, selected: data});
+            if (currentPage < numPages){
+                if(timer.isRunning){
+                    timer.accumulated += Date.now() - timer.startTime;
+                    saveTimer();
+                };
+                location.href = `/interact?page=${currentPage + 1}`;
+                shift_button.disabled = false;
+            };
+            
+            if (numPages===currentPage){
+                page_data = await loadPageData({page_id: currentPage});
+                non_finished_cases = page_data.non_finished_cases;
+                const ll_finished = non_finished_cases.length;
+                console.log(ll_finished);
+                if (ll_finished !== 0){
                     if(timer.isRunning){
                         timer.accumulated += Date.now() - timer.startTime;
                         saveTimer();
                     };
+                    alert(`有${ll_finished}个案例未填写完成，无法提交！`);
+                    location.href = `/interact?page=${non_finished_cases[0]+1}`;
                     shift_button.disabled = false;
-                    location.href = `/interact?page=${currentPage + 1}`;
+                } else {
+                    timer.isRunning = false;
+                    await updateTime({page_id: currentPage, during_time: getDuration()});
+                    localStorage.removeItem(TIMER_KEY);
+                    clearInterval(timerInterval); 
+                    location.href = `/finished`;
                 };
-                
-                if (numPages===currentPage){
-                    page_data = await loadPageData({page_id: currentPage});
-                    non_finished_cases = page_data.non_finished_cases;
-                    const ll_finished = non_finished_cases.length;
-                    console.log(ll_finished);
-                    if (ll_finished !== 0){
-                        if(timer.isRunning){
-                            timer.accumulated += Date.now() - timer.startTime;
-                            saveTimer();
-                        };
-                        alert(`有${ll_finished}个案例未填写完成，无法提交！`);
-                        location.href = `/interact?page=${non_finished_cases[0]+1}`;
-                    } else {
-                        timer.isRunning = false;
-                        await updateTime({page_id: currentPage, during_time: getDuration()});
-                        localStorage.removeItem(TIMER_KEY);
-                        clearInterval(timerInterval); 
-                        location.href = `/finished`;
-                    };
-                };
-            } catch(e) {
-                console.error(e);
             };
-        })();
+        } catch(e) {
+            console.error(e);
+        };
     });
 
     // 图片缩放与拖拽控制逻辑

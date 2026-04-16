@@ -62,7 +62,7 @@
         "边界特征": "成角",
         "with_ai": false,
         "confidence": "高信心",
-        "during_time": 21644,
+        "during_time": 30664,
         "diagnosis_result": "4c"
       },
       {
@@ -72,7 +72,7 @@
         "边界特征": "成角",
         "with_ai": false,
         "confidence": "中等信心",
-        "during_time": 20576,
+        "during_time": 33513,
         "diagnosis_result": "3级"
       },
       {
@@ -93,7 +93,7 @@
         "边界特征": "成角",
         "with_ai": true,
         "confidence": "中等信心",
-        "during_time": 614101,
+        "during_time": 737410,
         "diagnosis_result": "4b",
         "assistant": "可接受"
       }
@@ -188,7 +188,7 @@
         "边界特征": "",
         "with_ai": false,
         "confidence": "中等信心",
-        "during_time": 50772,
+        "during_time": 93872,
         "diagnosis_result": "4b"
       },
       {
@@ -198,7 +198,7 @@
         "边界特征": "成角",
         "with_ai": true,
         "confidence": "中等信心",
-        "during_time": 27102,
+        "during_time": 111121,
         "diagnosis_result": "4b",
         "assistant": ""
       }
