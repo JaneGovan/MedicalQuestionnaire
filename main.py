@@ -51,6 +51,7 @@ def login_required(view):
     return wrapped
 
 @app.errorhandler(404)
+@app.errorhandler(405)
 def page_not_found(e):
     Logger.warning(f'404 页面不存在: {request.path}')
     return "404, 页面不存在！", 404
